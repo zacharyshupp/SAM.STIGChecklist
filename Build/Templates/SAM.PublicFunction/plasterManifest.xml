@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<plasterManifest
+  schemaVersion="1.0" xmlns="http://www.microsoft.com/schemas/PowerShell/Plaster/v1">
+  <metadata>
+    <name>SAM-PublicFunction</name>
+    <id>ffcc5ace-35b9-4842-a090-24dc1ed321de</id>
+    <version>0.0.1</version>
+    <title>Public function with tests Template</title>
+    <description>A template to add a Public function to a SAM Project</description>
+    <author>Zachary Shupp</author>
+    <tags>SAM,Template, Build, Module</tags>
+  </metadata>
+  <parameters>
+    <parameter name="ModuleName" type="text" prompt="Name of the Module the function will belong to"/>
+    <parameter name="FunctionName" type="text" prompt="Name of the Public function"/>
+  </parameters>
+  <content>
+    <templateFile source='Get-Something.ps1.template' destination='${PLASTER_PARAM_ModuleName}/Public/${PLASTER_PARAM_FunctionName}.ps1' />
+    <templateFile source='Get-Something.tests.ps1.template' destination='Tests/Module Functions/Public/${PLASTER_PARAM_FunctionName}.tests.ps1' />
+  </content>
+</plasterManifest>

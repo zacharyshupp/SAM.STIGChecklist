@@ -1,0 +1,19 @@
+#next-version: 1.0.0
+mode: ContinuousDeployment
+branches:
+  master:
+    tag: beta
+    increment: Patch
+    is-release-branch: true
+  release:
+    tag: rc
+  pull-request:
+    tag: pr
+  feature:
+    tag: feat
+
+#Custom commit messages to support Conventional Commit and DevMoji syntax
+major-version-bump-message: 💥|:boom:|BREAKING CHANGE:|\+semver:\s?(breaking|major)
+minor-version-bump-message: ✨|:(feat|tada):|^feat:|\+semver:\s?(feature|minor)
+patch-version-bump-message: '[📌🐛🩹🚑♻️🗑️🔥⚡🔒➕➖🔗⚙️]|:(bug|refactor|perf|security|add|remove|deps|config):|^(fix|refactor|perf|security|style|deps):|\+semver:\s?(fix|patch)'
+no-bump-message:  '[📝📚🎨🚨💡🧪✔️✅☑️🚀📦👷🌐🔧]|:(docs|style|test|test_tube|release|build|ci|i18n|chore|heavy_check_mark|white_check_mark|ballot_box_with_check):|^(docs|style|test|release|build|ci|i18n|chore):|\+semver:\s?(none|skip)'

@@ -1,0 +1,50 @@
+{
+
+    //Files
+    "files.trimTrailingWhitespace": true,
+    "files.trimFinalNewlines": true,
+    "files.insertFinalNewline": true,
+    "files.associations": {
+        "*.ps1xml": "xml"
+    },
+
+    //PowerShell
+    "powershell.buttons.showPanelMovementButtons": true,
+    "powershell.codeFormatting.autoCorrectAliases": false,
+    "powershell.codeFormatting.pipelineIndentationStyle": "IncreaseIndentationAfterEveryPipeline",
+    "powershell.codeFormatting.useCorrectCasing": true,
+    "powershell.codeFolding.showLastLine": false,
+    "powershell.integratedConsole.forceClearScrollbackBuffer": true,
+    "powershell.scriptAnalysis.settingsPath": "${cwd}/Build/PSScriptAnalyzerSettings.psd1",
+    "powershell.scriptAnalysis.enable": true,
+    "powershell.developer.bundledModulesPath": "${cwd}/BuildDependencies",
+    "powershell.pester.useLegacyCodeLens": false,
+    "[powershell]": {
+        "files.encoding": "utf8bom",
+        "files.autoGuessEncoding": true
+    },
+
+    //todo-tree
+    "todo-tree.general.statusBar": "current file",
+    "todo-tree.general.tags": [
+        "BUG",
+        "FIX",
+        "TODO"
+    ],
+    "powershell.pester.debugOutputVerbosity": "Minimal",
+    "powershell.pester.outputVerbosity": "Diagnostic",
+    "cSpell.words": [
+        "DISA",
+        "SCAP",
+        "SCC",
+        "STIG",
+        "cati",
+        "catii",
+        "catiii",
+        "count",
+        "gitreleasemanager",
+        "stigid",
+        "tool",
+        "vuln"
+    ]
+}

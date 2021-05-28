@@ -1,0 +1,32 @@
+## Configuration values used when creating new releases
+create:
+  include-footer: true
+  footer-heading: Where to get it
+  footer-content: >-
+    You can download this release from:
+
+    [PowerShell Gallery](https://www.powershellgallery.com/packages/SAM.STIGChecklist/{milestone})
+  footer-includes-milestone: true
+  milestone-replace-text: '{milestone}'
+
+## Configuration values used when closing a milestone
+close:
+  use-issue-comments: true
+  issue-comment: |-
+    This issue has been resolved in version {milestone} :star2:
+
+    The release is available on:
+
+    - [NuGet package(@{milestone})](https://nuget.org/packages/{repository}/{milestone})
+    - [GitHub release](https://github.com/{owner}/{repository}/releases/tag/{milestone})
+
+    Your **[GitReleaseManager](https://github.com/GitTools/GitReleaseManager)** bot :package::rocket:
+
+## The labels that will be used to include issues in release notes.
+issue-labels-include:
+- Bug
+- Enhancement
+- Documentation
+- Feature
+- Improvement
+- WontFix
