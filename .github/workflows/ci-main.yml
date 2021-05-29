@@ -61,78 +61,78 @@ jobs:
           name: PSModule
           path: ${{ steps.SetEnvVariables.outputs.prjModulePath }}
 
-  test:
-    name: Pester Tests
-    needs: build
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        os:
-          - ubuntu-latest
-          - windows-latest
-    steps:
-      - name: Get Debug Status
-        id: debugStatus
-        run: |
-          echo '::set-output name=runnerDebug::${{secrets.ACTIONS_RUNNER_DEBUG}}'
-          echo '::set-output name=stepDebug::${{secrets.ACTIONS_STEP_DEBUG}}'
-
-
-      - name: Checkout Repository
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-
-      - name: Restore Built Powershell Module
-        uses: actions/download-artifact@v2
-        with:
-          name: PSModule
-          path: BuildOutput/${{ github.event.repository.name }}
-
-      - name: Install Dependencies and Set Environment
-        id: SetEnvVariables
-        shell: pwsh
-        run: |
-          .\build.ps1 -InstallDependencies -Task SetEnvironment
-
-      - if: steps.debugStatus.outputs.stepDebug
-        name: Environment Information
-        shell: pwsh
-        run: |
-          "::group::Powershell Version"
-          $PSVersionTable | Select *
-          "::endgroup"
-
-      - name: Test Powershell 7+
-        id: pwsh7testing
-        shell: pwsh
-        run: |
-          if ('${{secrets.ACTIONS_STEP_DEBUG}}') {$verbosePreference = 'continue'}
-          .\build.ps1 -Task Test
-
-      - name: Capture PowerShell 7 Pester Results
-        uses: actions/upload-artifact@v2
-        with:
-          name: ${{ steps.pwsh7testing.outputs.pesterfile }}
-          path: ${{ steps.pwsh7testing.outputs.pesterResults }}
-
-      - if: runner.os == 'Windows'
-        name: Test Windows Powershell 5.1
-        id: pwsh5testing
-        shell: powershell
-        run: |
-          if ('${{secrets.ACTIONS_STEP_DEBUG}}') {$verbosePreference = 'continue'}
-          .\build.ps1 -Task Test
-
-      - if: runner.os == 'Windows'
-        name: Capture PowerShell 5 Pester Results
-        uses: actions/upload-artifact@v2
-        with:
-          name: ${{ steps.pwsh5testing.outputs.pesterfile }}
-          path: ${{ steps.pwsh5testing.outputs.pesterResults }}
-    if: ${{ always() }}
-
+  #test:
+  #  name: Pester Tests
+  #  needs: build
+  #  runs-on: ${{ matrix.os }}
+  #  strategy:
+  #    fail-fast: false
+  #    matrix:
+  #      os:
+  #        - ubuntu-latest
+  #        - windows-latest
+  #  steps:
+  #    - name: Get Debug Status
+  #      id: debugStatus
+  #      run: |
+  #        echo '::set-output name=runnerDebug::${{secrets.ACTIONS_RUNNER_DEBUG}}'
+  #        echo '::set-output name=stepDebug::${{secrets.ACTIONS_STEP_DEBUG}}'
+#
+#
+  #    - name: Checkout Repository
+  #      uses: actions/checkout@v2
+  #      with:
+  #        fetch-depth: 0
+#
+  #    - name: Restore Built Powershell Module
+  #      uses: actions/download-artifact@v2
+  #      with:
+  #        name: PSModule
+  #        path: BuildOutput/${{ github.event.repository.name }}
+#
+  #    - name: Install Dependencies and Set Environment
+  #      id: SetEnvVariables
+  #      shell: pwsh
+  #      run: |
+  #        .\build.ps1 -InstallDependencies -Task SetEnvironment
+#
+  #    - if: steps.debugStatus.outputs.stepDebug
+  #      name: Environment Information
+  #      shell: pwsh
+  #      run: |
+  #        "::group::Powershell Version"
+  #        $PSVersionTable | Select *
+  #        "::endgroup"
+#
+  #    - name: Test Powershell 7+
+  #      id: pwsh7testing
+  #      shell: pwsh
+  #      run: |
+  #        if ('${{secrets.ACTIONS_STEP_DEBUG}}') {$verbosePreference = 'continue'}
+  #        .\build.ps1 -Task Test
+#
+  #    - name: Capture PowerShell 7 Pester Results
+  #      uses: actions/upload-artifact@v2
+  #      with:
+  #        name: ${{ steps.pwsh7testing.outputs.pesterfile }}
+  #        path: ${{ steps.pwsh7testing.outputs.pesterResults }}
+#
+  #    - if: runner.os == 'Windows'
+  #      name: Test Windows Powershell 5.1
+  #      id: pwsh5testing
+  #      shell: powershell
+  #      run: |
+  #        if ('${{secrets.ACTIONS_STEP_DEBUG}}') {$verbosePreference = 'continue'}
+  #        .\build.ps1 -Task Test
+#
+  #    - if: runner.os == 'Windows'
+  #      name: Capture PowerShell 5 Pester Results
+  #      uses: actions/upload-artifact@v2
+  #      with:
+  #        name: ${{ steps.pwsh5testing.outputs.pesterfile }}
+  #        path: ${{ steps.pwsh5testing.outputs.pesterResults }}
+  #  if: ${{ always() }}
+#
   deployPrerelease:
     name: Deploy PreRelease Module
     if: github.ref == 'refs/heads/main'
@@ -140,7 +140,6 @@ jobs:
     environment: PreRelease
     needs:
       - build
-      - Test
     steps:
       - name: Restore Built Powershell Module
         uses: actions/download-artifact@v2
@@ -148,11 +147,11 @@ jobs:
           name: PSModule
           path: BuildOutput/${{ github.event.repository.name }}
 
-      #- name: Publish Module to PowerShell Gallery
-      #  shell: pwsh
-      #  run: |
-      #    if (-not '${{ secrets.PS_GALLERY_KEY }}') {throw 'You need to configure a PS_GALLERY_KEY secret for this environment with your Powershell Gallery API Key'}
-      #    Publish-Module -Verbose -Name $PWD/BuildOutput/${{ github.event.repository.name }} -NugetApiKey ${{ secrets.PS_GALLERY_KEY }}
+      - name: Publish Module to PowerShell Gallery
+        shell: pwsh
+        run: |
+          if (-not '${{ secrets.PS_GALLERY_KEY }}') {throw 'You need to configure a PS_GALLERY_KEY secret for this environment with your Powershell Gallery API Key'}
+          Publish-Module -Verbose -Name $PWD/BuildOutput/${{ github.event.repository.name }} -NugetApiKey ${{ secrets.PS_GALLERY_KEY }}
 
   deploy:
     name: Deploy Module
@@ -161,7 +160,6 @@ jobs:
     environment: Release
     needs:
       - build
-      - test
     steps:
       - name: Restore Built Powershell Module
         uses: actions/download-artifact@v2
@@ -169,8 +167,8 @@ jobs:
           name: PSModule
           path: BuildOutput/${{ github.event.repository.name }}
 
-      #- name: Publish Module to PowerShell Gallery
-      #  shell: pwsh
-      #  run: |
-      #    if (-not '${{ secrets.PS_GALLERY_KEY }}') {throw 'You need to configure a PS_GALLERY_KEY secret for this environment with your Powershell Gallery API Key'}
-      #    Publish-Module -Verbose -Name $PWD/BuildOutput/${{ github.event.repository.name }} -NugetApiKey ${{ secrets.PS_GALLERY_KEY }}
+      - name: Publish Module to PowerShell Gallery
+        shell: pwsh
+        run: |
+          if (-not '${{ secrets.PS_GALLERY_KEY }}') {throw 'You need to configure a PS_GALLERY_KEY secret for this environment with your Powershell Gallery API Key'}
+          Publish-Module -Verbose -Name $PWD/BuildOutput/${{ github.event.repository.name }} -NugetApiKey ${{ secrets.PS_GALLERY_KEY }}
