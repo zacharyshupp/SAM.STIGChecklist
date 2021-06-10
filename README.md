@@ -1,6 +1,6 @@
 # SAM.STIGChecklist
 
-<!---[![PowerShell Gallery Version](https://img.shields.io/powershellgallery/v/SAM.STIGChecklist?color=Green&logo=PowerShell&style=for-the-badge)](https://www.powershellgallery.com/packages/SAM.STIGChecklist)-->
+[![PowerShell Gallery Version](https://img.shields.io/powershellgallery/v/SAM.STIGChecklist?color=Green&logo=PowerShell&style=for-the-badge)](https://www.powershellgallery.com/packages/SAM.STIGChecklist)
 
 [![Minimum Supported PowerShell Version](https://img.shields.io/static/v1?label=PSVersion&message=5.1%2B&color=Green&logo=PowerShell&style=for-the-badge)](https://github.com/PowerShell/PowerShell)
 
